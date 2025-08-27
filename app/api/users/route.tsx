@@ -103,9 +103,15 @@ export async function DELETE(request: Request) {
     try {
       const url = new URL(request.url);  // Get the request URL
       const userId = parseInt(url.searchParams.get('id')!); // Get the `id` from the query string
+
+      
   
       // Keep the length of the array for comparison
       const initialLength = users.length;
+
+      if (userId === -1) {
+        users = [];
+      }
   
       // Remove the user by ID
       users = users.filter((user) => user.id !== userId);
@@ -113,7 +119,7 @@ export async function DELETE(request: Request) {
       if (users.length === initialLength) {
         return new NextResponse('User not found', { status: 404 });
       }
-  
+    
       return new NextResponse(null, { status: 204 }); // No content on successful deletion
     } catch (error) {
       console.error("Error in DELETE request:", error);
